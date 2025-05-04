@@ -7,10 +7,10 @@ Behind the scenes the tool combines **PyMuPDF‑powered** PDF parsing, an **OCR 
 ---
 
 ### ✨  Key Features
-* **Robust PDF extraction** – PyMuPDF reads embedded text; image‑only pages are piped through Tesseract OCR so nothing is lost. :contentReference[oaicite:0]{index=0}  
-* **Chunk‑aware LLM translation** – Long acts are sliced into ~1 600‑token windows so every clause fits inside GPT‑4o’s 128 k context ceiling. :contentReference[oaicite:1]{index=1}  
-* **Progress bars** – Two `tqdm` bars track PDF scanning and LLM translation in real time. :contentReference[oaicite:2]{index=2}  
-* **Deterministic name harmonisation** – A fast regex pass unifies predicate and variable spellings across chunks before the final LLM clean‑up, guaranteeing duplicates collapse correctly. :contentReference[oaicite:3]{index=3}  
+* **Robust PDF extraction** – PyMuPDF reads embedded text; image‑only pages are piped through Tesseract OCR so nothing is lost.
+* **Chunk‑aware LLM translation** – Long acts are sliced into ~1 600‑token windows so every clause fits inside GPT‑4o’s 128 k context ceiling.   
+* **Progress bars** – Two `tqdm` bars track PDF scanning and LLM translation in real time. {index=2}  
+* **Deterministic name harmonisation** – A fast regex pass unifies predicate and variable spellings across chunks before the final LLM clean‑up, guaranteeing duplicates collapse correctly.
 * **Single‑file output** – The resulting rules are written to  
   `…/Canadian‑Employee‑Standards‑Act---Prolog‑Translation/<PDF‑name>_prolog.txt`.
 
@@ -20,14 +20,14 @@ Behind the scenes the tool combines **PyMuPDF‑powered** PDF parsing, an **OCR 
 
 | Package | Purpose |
 |---------|---------|
-| `PyMuPDF >= 1.25` | High‑fidelity PDF parsing with image export :contentReference[oaicite:4]{index=4} |
-| `pytesseract >= 0.3` | OCR fallback for scanned pages :contentReference[oaicite:5]{index=5} |
-| `tesseract` binary | Install via `brew install tesseract` on macOS :contentReference[oaicite:6]{index=6} |
-| `openai >= 1.77` | Access to GPT‑4o Chat Completions :contentReference[oaicite:7]{index=7} |
-| `python‑dotenv >= 1.0` | Load `OPENAI_API_KEY` from a `.env` file :contentReference[oaicite:8]{index=8} |
-| `tqdm >= 4.66` | Pretty progress bars :contentReference[oaicite:9]{index=9} |
+| `PyMuPDF >= 1.25` | High‑fidelity PDF parsing with image export |
+| `pytesseract >= 0.3` | OCR fallback for scanned pages  |
+| `tesseract` binary | Install via `brew install tesseract` on macOS  |
+| `openai >= 1.77` | Access to GPT‑4o Chat Completions |
+| `python‑dotenv >= 1.0` | Load `OPENAI_API_KEY` from a `.env` file  |
+| `tqdm >= 4.66` | Pretty progress bars  |
 
-> **Note:** GPT‑4o’s 128 k token context is ample for provincial acts; if you migrate to GPT‑4.1 Mini/Nano you’ll still be well within limits :contentReference[oaicite:10]{index=10}.
+> **Note:** GPT‑4o’s 128 k token context is ample for provincial acts; if you migrate to GPT‑4.1 Mini/Nano you’ll still be well within limits.
 
 ---
 
@@ -82,10 +82,10 @@ penalty(recruiter, fine_for_non_compliance).
 
 ### 🏗️  How It Works
 
-1. **PDF scan** – `fitz.open(pdf_path)` streams each page; empty pages are rasterised and OCR‑ed. ([PyMuPDF][1], [PyImageSearch][2])
+1. **PDF scan** – `fitz.open(pdf_path)` streams each page; empty pages are rasterised and OCR‑ed.
 2. **Chunking** – Paragraphs are grouped until \~4 000 chars to respect the model’s message limits.
 3. **First GPT‑4o pass** – Each chunk is translated into Prolog with a strict schema prompt.
-4. **Local name normalisation** – `unify_names()` sticks to the first spelling of every identifier using `re` word‑boundary replacements ([Stack Overflow][3], [W3Schools.com][4]).
+4. **Local name normalisation** – `unify_names()` sticks to the first spelling of every identifier using `re` word‑boundary replacements.
 5. **Second GPT‑4o pass** – Rules are deduped and final‑polished.
 6. **Write‑out** – Everything ends up in the fixed `TARGET_DIR`.
 
