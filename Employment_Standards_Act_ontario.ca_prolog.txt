@@ -1,0 +1,134 @@
+```prolog
+definition(agent, includes(trade_union_that_represents_employee_in_collective_bargaining)).
+definition(alternative_vacation_entitlement_year, means(recurring_12_month_period_begins_on_date_chosen_by_employer_other_than_first_day_of_employment)).
+definition(arbitrator, includes(board_of_arbitration)).
+definition(arbitrator, includes(board_when_acting_under_section_133_of_labour_relations_act_1995)).
+definition(assignment_employee, means(employee_employed_by_temporary_help_agency_for_temporary_work_for_clients)).
+definition(benefit_plan, means(benefit_plan_provided_for_employee_by_or_through_employer)).
+definition(board, means(ontario_labour_relations_board)).
+definition(building_services, means(services_for_building_with_respect_to_food_security_cleaning_and_any_prescribed_services)).
+definition(building_services_provider, means(person_who_provides_building_services_for_premises)).
+definition(building_services_provider, includes(owner_or_manager_of_premises_if_providing_building_services_for_premises_owned_or_managed)).
+business_includes_activity_trade_undertaking(Business) :- activity(Business).
+business_includes_activity_trade_undertaking(Business) :- trade(Business).
+business_includes_activity_trade_undertaking(Business) :- undertaking(Business).
+business_consultant(Individual, Business) :- provides_advice_or_services(Individual, Business, performance).
+provides_advice_or_services(Individual, Business, performance) :- provides_advice_or_services(Individual, Business, operations).
+provides_advice_or_services(Individual, Business, performance) :- provides_advice_or_services(Individual, Business, profitability).
+provides_advice_or_services(Individual, Business, performance) :- provides_advice_or_services(Individual, Business, management).
+provides_advice_or_services(Individual, Business, performance) :- provides_advice_or_services(Individual, Business, structure).
+provides_advice_or_services(Individual, Business, performance) :- provides_advice_or_services(Individual, Business, processes).
+provides_advice_or_services(Individual, Business, performance) :- provides_advice_or_services(Individual, Business, finances).
+provides_advice_or_services(Individual, Business, performance) :- provides_advice_or_services(Individual, Business, accounting).
+provides_advice_or_services(Individual, Business, performance) :- provides_advice_or_services(Individual, Business, procurements).
+provides_advice_or_services(Individual, Business, performance) :- provides_advice_or_services(Individual, Business, human_resources).
+provides_advice_or_services(Individual, Business, performance) :- provides_advice_or_services(Individual, Business, environmental_impacts).
+provides_advice_or_services(Individual, Business, performance) :- provides_advice_or_services(Individual, Business, marketing).
+provides_advice_or_services(Individual, Business, performance) :- provides_advice_or_services(Individual, Business, risk_management).
+provides_advice_or_services(Individual, Business, performance) :- provides_advice_or_services(Individual, Business, compliance).
+provides_advice_or_services(Individual, Business, performance) :- provides_advice_or_services(Individual, Business, strategy).
+client(Person_Entity, Agency) :- enters_arrangement(Person_Entity, Agency), agency_agrees_assign_employees(Agency, Person_Entity).
+collector(Person) :- authorized_by_director(Person), not(employment_standards_officer(Person)).
+continuous_operation(Operation) :- operation_continues_24_hours(Operation), not(cessation_in_seven_day_period(Operation)).
+director(director_of_employment_standards).
+domestic_or_sexual_violence_leave_pay(Pay) :- paid_days_of_leave(Pay, section_49_7).
+employee(Person) :- performs_work_for_employer(Person, Employer), wages(Person).
+employee(Person) :- supplies_services_to_employer(Person, Employer), wages(Person).
+employee(Person) :- receives_training_from_employer(Person, Employer), skill_used_by_employees(Person, Employer).
+employee(Person) :- homeworker(Person).
+employee(X) :- person(X), was_employee(X).
+employer(X) :- owner(X); proprietor(X); manager(X); superintendent(X); overseer(X); receiver(X); trustee(X), 
+               has_control_or_direction_of_employment(X, Y); 
+               is_responsible_for_employment(X, Y).
+employer(X) :- persons_treated_as_one_employer(X, section_4).
+employer(X) :- person(X), was_employer(X).
+employment_contract(X) :- collective_agreement(X).
+employment_standard(X) :- requirement_or_prohibition(X), applies_to_employer_for_benefit_of_employee(X).
+establishment(X, employer(Y)) :- location(X), employer_carries_on_business_at_location(Y, X).
+establishment(X, employer(Y)) :- separate_locations(X, Y), located_within_same_municipality(X, Y).
+establishment(X, employer(Y)) :- employee_seniority_rights_extend_to_other_location(X, Y), 
+                                 written_employment_contract(X, Y), 
+                                 employee_may_displace_another_employee(X, Y).
+homeworker(X) :- individual(X), performs_work_for_compensation_in_residential_quarters(X), 
+                 \+ independent_contractor(X).
+infectious_disease_emergency_leave_pay(X) :- pay_for_paid_days_of_leave(X, subsection_50_1_1_2).
+information_technology_consultant(X) :- individual(X), provides_advice_or_services_in_IT(X).
+overtime_hour(X, employee(Y)) :- employment_contract_provision(X, Y), 
+                                 provides_greater_benefit_for_overtime_than_part_VIII(X).
+overtime_hour(X, employee(Y)) :- hour_of_work_in_excess_of_overtime_threshold(X, Y).
+person(X) :- trade_union(X).
+premium_pay(X, employee(Y)) :- entitlement_for_working_on_public_holiday(X, Y, subsection_24_2).
+public_holiday(new_years_day).
+public_holiday(family_day).
+public_holiday(good_friday).
+public_holiday(victoria_day).
+public_holiday(canada_day).
+public_holiday(labour_day).
+public_holiday(thanksgiving_day).
+public_holiday(christmas_day).
+public_holiday(december_26).
+public_holiday(X) :- prescribed_as_public_holiday(X).
+public_holiday_pay(Employee, Entitlement) :- entitlement_determined_under_subsection_24_1(Employee, Entitlement).
+recruiter(X) :- defined_in_regulations(X).
+regular_rate(Employee, Rate) :- 
+    paid_by_hour(Employee), 
+    amount_earned_for_hour(Employee, Rate), 
+    usual_work_week(Employee), 
+    not_counting_overtime_hours(Employee).
+regular_rate(Employee, Rate) :- 
+    not_paid_by_hour(Employee), 
+    amount_earned_in_week(Employee, Amount), 
+    non_overtime_hours_worked(Employee, Hours), 
+    Rate is Amount / Hours.
+regular_wages(Employee, Wages) :- 
+    wages(Employee, Wages), 
+    not_overtime_pay(Wages), 
+    not_public_holiday_pay(Wages), 
+    not_premium_pay(Wages), 
+    not_vacation_pay(Wages), 
+    not_domestic_or_sexual_violence_leave_pay(Wages), 
+    not_infectious_disease_emergency_leave_pay(Wages), 
+    not_termination_pay(Wages), 
+    not_severance_pay(Wages), 
+    not_termination_of_assignment_pay(Wages), 
+    not_entitlements_under_contract_provision(Wages).
+regular_work_day(Employee, Hours) :- 
+    usually_works_same_hours_each_day(Employee), 
+    day_of_hours(Employee, Hours).
+regular_work_week(Employee, Hours) :- 
+    usually_works_same_hours_each_week(Employee), 
+    week_of_hours(Employee, Hours), 
+    not_including_overtime_hours(Employee).
+regulations(X) :- made_under_act(X).
+reservist(X) :- member_of_reserve_force(X), 
+    referred_to_in_subsection_15_3_national_defence_act(X).
+standard_vacation_entitlement_year(Employee, Year) :- 
+    recurring_12_month_period(Employee, Year), 
+    begins_on_first_day_of_employment(Employee, Year).
+statutory_notice_period(Period) :-
+    notice_of_termination_required(Period, Part_XV).
+statutory_notice_period(Period) :-
+    greater_notice_provided_by_employer(Notice, Part_XV),
+    part_of_notice_period_ending_with_termination_date(Notice, Period).
+stub_period(Employee, Period) :-
+    first_alternative_vacation_entitlement_year_begins_before_12_months(Employee),
+    period_begins_on_first_day_of_employment(Employee, Start),
+    period_ends_on_day_before_start_of_alternative_year(Employee, End),
+    Period = period(Start, End).
+stub_period(Employee, Period) :-
+    first_alternative_vacation_entitlement_year_begins_after_12_months(Employee),
+    period_begins_on_day_after_most_recent_standard_year_ended(Employee, Start),
+    period_ends_on_day_before_start_of_alternative_year(Employee, End),
+    Period = period(Start, End).
+temporary_help_agency(Employer) :-
+    employs_persons_for_temporary_assignment(Employer).
+termination_of_assignment_pay(Pay, Employee) :-
+    assignment_terminated_before_estimated_term(Employee, section_74_10_1).
+tip_or_other_gratuity(Payment, Employee) :-
+    payment_voluntarily_made_by_customer(Payment, Employee),
+    reasonable_person_infer_payment_kept_or_shared(Employee).
+tip_or_other_gratuity(Payment, Employer) :-
+    payment_voluntarily_made_by_customer(Payment, Employer),
+    reasonable_person_infer_payment_kept_or_shared_with_employees(Employer).
+payment_redistributed_to_employee(c).
+payment_redistributed

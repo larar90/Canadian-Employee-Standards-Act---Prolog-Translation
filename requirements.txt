@@ -1,0 +1,8 @@
+openai
+PyPDF2
+python-dotenv
+tqdm
+fitz
+frontend
+PyMuPDF>=1.25.5
+pytesseract
